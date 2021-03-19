@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- project:根节点 -->
+    <!-- modelVersion:固定4.0.0 -->
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 父工程内聚合子模块 -->
+    <!-- modules存在于父pom中，parent存在于子pom中 -->
+    <modules>
+        <!-- 模块都写在此处 -->
+        <module>account-register</module>
+        <module>account-persist</module>
+    </modules>
+    <!-- 引用父节工程的依赖 -->
+    <parent>
+        <groupId>com.mycompany.app</groupId>
+        <artifactId>my-module</artifactId>
+        <version>1</version>
+        <!-- 引用父工程下其他工程内的pom.xml -->
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+    <!-- groupId:项目ID -->
+    <groupId>com.mycompany.app</groupId>
+    <!-- 本项目的唯一ID，一个groupId下面可能多个项目，就是靠artifactId来区分的 -->
+    <artifactId>my-app</artifactId>
+    <!-- 本项目目前所处的版本号 -->
+    <version>0.0.1-SNAPSHOT</version>
+    <!-- 打包的机制，如pom,jar, maven-plugin, ejb, war, ear, rar, par，默认为jar -->
+    <packaging>jar</packaging>
+    <!-- 属性 -->
+    <!-- properties和${}结合使用 -->
+    <properties>
+        <mavenVersion>3.0</mavenVersion>
+        <testParam>value</testParam>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven</artifactId>
+            <version>${mavenVersion}</version>
+        </dependency>
+    </dependencies>
+
+    <!-- 区别构建发布包 -->
+    <!-- maven package -P test -Dmaven.test.skip=true -->
+    <!-- maven package -P release -Dmaven.test.skip=true -->
+    <!-- setting.xml -> activeProfiles -> activeProfile -->
+    <!-- -DpropertyName=propertyValue 对插件的目标参数进行配置 -->
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <resources>
+                    <resource>
+                        <!-- resources中存放的一般是application.yml之类的配置文件 -->
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>**/*</include>
+                        </includes>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+        <profile>
+            <id>test</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/test/resources</directory>
+                        <includes>
+                            <include>config/*.properties</include>
+                            <include>log4j.xml</include>
+                        </includes>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <includes>
+                            <include>**/*.xml</include>
+                        </includes>
+                        <excludes>
+                            <exclude>log4j.xml</exclude>
+                        </excludes>
+                    </resource>
+                </resources>
+            </build>
+            <activation>
+                <!-- 默认加载的profile -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+    <!--构建项目需要的信息 -->
+    <build>
+        <!--使用来自该项目的一系列构建扩展 -->
+        <extensions>
+            <extension>
+                <!--构建扩展的groupId -->
+                <groupId>groupId</groupId>
+                <!--构建扩展的artifactId -->
+                <artifactId>artifactId</artifactId>
+                <!--构建扩展的版本 -->
+                <version>version</version>
+            </extension>
+        </extensions>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <!-- 包含 -->
+                <includes></includes>
+                <!-- 排除 -->
+                <excludes></excludes>
+            </resource>
+        </resources>
+    </build>
+
+</project>
